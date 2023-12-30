@@ -6,7 +6,7 @@
 /*   By: iez-zagh <iez-zagh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/27 10:56:35 by iez-zagh          #+#    #+#             */
-/*   Updated: 2023/12/29 10:38:50 by iez-zagh         ###   ########.fr       */
+/*   Updated: 2023/12/30 12:50:02 by iez-zagh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #define GET_NEXT_LINE_H
 
 # ifndef BUFFER_SIZE
-#define BUFFER_SIZE 10
+#define BUFFER_SIZE 15
 
 #endif
 #include <stdio.h>
