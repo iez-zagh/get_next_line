@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*   get_next_line_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: iez-zagh <iez-zagh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/12/27 17:30:41 by iez-zagh          #+#    #+#             */
-/*   Updated: 2024/01/04 11:53:50 by iez-zagh         ###   ########.fr       */
+/*   Created: 2024/01/04 05:20:21 by iez-zagh          #+#    #+#             */
+/*   Updated: 2024/01/04 10:39:22 by iez-zagh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 
 char	*ft_one_line(char *str, int j)
 {
@@ -20,13 +20,7 @@ char	*ft_one_line(char *str, int j)
 	i = 0;
 	if (!str)
 		return (0);
-	if (j == -1)
-	{
-		//printf ("[%d]", j);
-		str2 = malloc(ft_strlen(str) + 1);
-	}
-	else
-		str2 = malloc(j + 2);
+	str2 = malloc(j + 2);
 	if (!str2)
 		return (NULL);
 	while (i <= j)
@@ -37,13 +31,14 @@ char	*ft_one_line(char *str, int j)
 	str2[i] = '\0';
 	return (str2);
 }
-char	*check(char **str1, char **str3, int j)
+
+char	*check(char **str1, char **str3, int *j)
 {
 	char	*str2;
 
-	str2 = ft_one_line(*str1, j);
+	str2 = ft_one_line(*str1, *j);
 	*str3 = *str1;
-	*str1 = ft_substr(*str1, j + 1, ft_strlen(*str1) - j);
+	*str1 = ft_substr(*str1, *j + 1, ft_strlen(*str1) - *j);
 	return (free(*str3), str2);
 }
 
@@ -81,10 +76,7 @@ char	*ft_read(int fd, char **buffer, char *str)
 	j = 0;
 	j = ft_strchr(*buffer, '\n');
 	if (j != -1)
-		return (free (str), check(buffer, &tmp, j));
-	// else
-	// 	return (free (str), check(buffer, &tmp, -1));
-		// return (*buffer);
+		return (free (str), check(buffer, &tmp, &j));
 	while (1)
 	{
 		u = read(fd, str, BUFFER_SIZE);
@@ -94,9 +86,7 @@ char	*ft_read(int fd, char **buffer, char *str)
 		*buffer = ft_strjoin(*buffer, str);
 		j = ft_strchr(*buffer, '\n');
 		if (j != -1)
-			return (free (str), check(buffer, &tmp, j));
-		// else
-		// 	return (free (str), check(buffer, &tmp, -1));
+			return (free (str), check(buffer, &tmp, &j));
 	}
 	free (*buffer);
 	*buffer = NULL;
@@ -105,7 +95,7 @@ char	*ft_read(int fd, char **buffer, char *str)
 
 char	*get_next_line(int fd)
 {
-	static char	*buffer;
+	static char	*buffer[OPEN_MAX];
 	char		*str;
 
 	str = malloc(BUFFER_SIZE + 1);
@@ -114,29 +104,17 @@ char	*get_next_line(int fd)
 	if (fd >= 0 && BUFFER_SIZE > 0 && fd <= OPEN_MAX
 		&& BUFFER_SIZE < INT_MAX)
 	{
-		return (ft_read(fd, &buffer, str));
+		return (ft_read(fd, &buffer[fd], str));
 	}
 	return (free(str), NULL);
 }
-
-// void	f()
+// int main()
 // {
-// 	system("leaks a.out");
-// }
-
-// int main ()
-// {
-// 	//atexit(f);
-// 	char *res ;
 // 	int u = open ("file.txt", O_RDONLY);
-
+// 	char *res;
 // 	while ((res = get_next_line(u)))
 // 	{
-// 		printf ("[%s]", res);
+// 		printf ("%s", res);
 // 		free (res);
 // 	}
-// 	// res = get_next_line(u);
-// 	// printf ("%s", res);
-// 	// free (res);
-// 	close (u);
 // }

@@ -1,11 +1,1 @@
-imad swap project is a verysimple and a highly straigh
-tforward algorithm project
-odata must be sorted.You have at your disposal a set of integer
-values, 2 stacks, and a set of instructionsto manipulate both stacks
-Your goal? Write a program in C called push_swap which calculates a
-nd displays
-on the standard output the smallest program, made of Push swap l
-anguage instructions,
-that sorts the integers received as arguments.
-Easy?
-We’ll see...
+g
