@@ -6,7 +6,7 @@
 /*   By: iez-zagh <iez-zagh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 05:20:21 by iez-zagh          #+#    #+#             */
-/*   Updated: 2024/01/05 03:07:54 by iez-zagh         ###   ########.fr       */
+/*   Updated: 2024/01/05 15:37:06 by iez-zagh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,7 +105,7 @@ char	*get_next_line(int fd)
 	if (!str)
 		return (NULL);
 	if (fd >= 0 && BUFFER_SIZE > 0 && fd <= OPEN_MAX
-		&& BUFFER_SIZE < INT_MAX)
+			&& BUFFER_SIZE <= INT_MAX)
 	{
 		return (ft_read(fd, &buffer[fd], str));
 	}
