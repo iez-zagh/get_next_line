@@ -6,7 +6,7 @@
 /*   By: iez-zagh <iez-zagh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/25 22:08:44 by iez-zagh          #+#    #+#             */
-/*   Updated: 2024/01/04 08:19:43 by iez-zagh         ###   ########.fr       */
+/*   Updated: 2024/01/04 23:57:59 by iez-zagh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,7 @@ char	*ft_strjoin(const char *s1, const char *s2)
 		res[len++] = s2[i++];
 	res[len] = '\0';
 	free((char *)s1);
+	s1 = NULL;
 	return (res);
 }
 

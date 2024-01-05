@@ -6,7 +6,7 @@
 /*   By: iez-zagh <iez-zagh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 05:20:21 by iez-zagh          #+#    #+#             */
-/*   Updated: 2024/01/04 10:39:22 by iez-zagh         ###   ########.fr       */
+/*   Updated: 2024/01/05 03:07:54 by iez-zagh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ char	*end_or_inv(int *u, char **buffer)
 			free(*buffer);
 			*buffer = NULL;
 		}
-		line = ft_one_line(*buffer, ft_strlen(*buffer));
+		line = ft_one_line(*buffer, ft_strlen(*buffer) - 1);
 		free (*buffer);
 		*buffer = NULL;
 		return (line);
@@ -74,19 +74,22 @@ char	*ft_read(int fd, char **buffer, char *str)
 	char		*tmp;
 
 	j = 0;
-	j = ft_strchr(*buffer, '\n');
-	if (j != -1)
-		return (free (str), check(buffer, &tmp, &j));
+	if (read(fd, str, 0) == -1)
+	{
+		free (*buffer);
+		*buffer = NULL;
+		return (free(str), NULL);
+	}
 	while (1)
 	{
+		j = ft_strchr(*buffer, '\n');
+		if (j != -1)
+			return (free (str), check(buffer, &tmp, &j));
 		u = read(fd, str, BUFFER_SIZE);
 		if (u == -1 || u == 0)
 			return (free(str), end_or_inv(&u, buffer));
 		str[u] = '\0';
 		*buffer = ft_strjoin(*buffer, str);
-		j = ft_strchr(*buffer, '\n');
-		if (j != -1)
-			return (free (str), check(buffer, &tmp, &j));
 	}
 	free (*buffer);
 	*buffer = NULL;
@@ -98,7 +101,7 @@ char	*get_next_line(int fd)
 	static char	*buffer[OPEN_MAX];
 	char		*str;
 
-	str = malloc(BUFFER_SIZE + 1);
+	str = malloc((size_t)BUFFER_SIZE + 1);
 	if (!str)
 		return (NULL);
 	if (fd >= 0 && BUFFER_SIZE > 0 && fd <= OPEN_MAX
@@ -108,13 +111,3 @@ char	*get_next_line(int fd)
 	}
 	return (free(str), NULL);
 }
-// int main()
-// {
-// 	int u = open ("file.txt", O_RDONLY);
-// 	char *res;
-// 	while ((res = get_next_line(u)))
-// 	{
-// 		printf ("%s", res);
-// 		free (res);
-// 	}
-// }

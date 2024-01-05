@@ -6,7 +6,7 @@
 /*   By: iez-zagh <iez-zagh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/27 17:30:41 by iez-zagh          #+#    #+#             */
-/*   Updated: 2024/01/04 11:53:50 by iez-zagh         ###   ########.fr       */
+/*   Updated: 2024/01/05 03:08:02 by iez-zagh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,14 +19,8 @@ char	*ft_one_line(char *str, int j)
 
 	i = 0;
 	if (!str)
-		return (0);
-	if (j == -1)
-	{
-		//printf ("[%d]", j);
-		str2 = malloc(ft_strlen(str) + 1);
-	}
-	else
-		str2 = malloc(j + 2);
+		return (NULL);
+	str2 = malloc(j + 2);
 	if (!str2)
 		return (NULL);
 	while (i <= j)
@@ -37,6 +31,7 @@ char	*ft_one_line(char *str, int j)
 	str2[i] = '\0';
 	return (str2);
 }
+
 char	*check(char **str1, char **str3, int j)
 {
 	char	*str2;
@@ -58,7 +53,7 @@ char	*end_or_inv(int *u, char **buffer)
 			free(*buffer);
 			*buffer = NULL;
 		}
-		line = ft_one_line(*buffer, ft_strlen(*buffer));
+		line = ft_one_line(*buffer, (ft_strlen(*buffer) - 1));
 		free (*buffer);
 		*buffer = NULL;
 		return (line);
@@ -79,24 +74,22 @@ char	*ft_read(int fd, char **buffer, char *str)
 	char		*tmp;
 
 	j = 0;
-	j = ft_strchr(*buffer, '\n');
-	if (j != -1)
-		return (free (str), check(buffer, &tmp, j));
-	// else
-	// 	return (free (str), check(buffer, &tmp, -1));
-		// return (*buffer);
+	if (read(fd, str, 0) == -1)
+	{
+		free (*buffer);
+		*buffer = NULL;
+		return (free(str), NULL);
+	}
 	while (1)
 	{
+		j = ft_strchr(*buffer, '\n');
+		if (j != -1)
+			return (free (str), check(buffer, &tmp, j));
 		u = read(fd, str, BUFFER_SIZE);
 		if (u == -1 || u == 0)
 			return (free(str), end_or_inv(&u, buffer));
 		str[u] = '\0';
 		*buffer = ft_strjoin(*buffer, str);
-		j = ft_strchr(*buffer, '\n');
-		if (j != -1)
-			return (free (str), check(buffer, &tmp, j));
-		// else
-		// 	return (free (str), check(buffer, &tmp, -1));
 	}
 	free (*buffer);
 	*buffer = NULL;
@@ -108,35 +101,13 @@ char	*get_next_line(int fd)
 	static char	*buffer;
 	char		*str;
 
-	str = malloc(BUFFER_SIZE + 1);
-	if (!str)
-		return (NULL);
 	if (fd >= 0 && BUFFER_SIZE > 0 && fd <= OPEN_MAX
-		&& BUFFER_SIZE < INT_MAX)
+		&& BUFFER_SIZE <= INT_MAX)
 	{
+		str = malloc((size_t)BUFFER_SIZE + 1);
+		if (!str)
+			return (NULL);
 		return (ft_read(fd, &buffer, str));
 	}
-	return (free(str), NULL);
+	return (NULL);
 }
-
-// void	f()
-// {
-// 	system("leaks a.out");
-// }
-
-// int main ()
-// {
-// 	//atexit(f);
-// 	char *res ;
-// 	int u = open ("file.txt", O_RDONLY);
-
-// 	while ((res = get_next_line(u)))
-// 	{
-// 		printf ("[%s]", res);
-// 		free (res);
-// 	}
-// 	// res = get_next_line(u);
-// 	// printf ("%s", res);
-// 	// free (res);
-// 	close (u);
-// }
